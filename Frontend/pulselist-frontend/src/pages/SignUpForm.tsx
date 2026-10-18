@@ -13,6 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { auth } from "../firebaseConfig";
 
@@ -21,6 +22,7 @@ function SignUpForm() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: async () => {
@@ -72,10 +74,10 @@ function SignUpForm() {
           <Stack spacing={3}>
             <Stack spacing={1.5} sx={{ alignItems: "center", textAlign: "center" }}>
               <Typography variant="h4" component="h1" sx={{ fontWeight: 800, letterSpacing: "0.2rem" }}>
-                JOIN PULSELIST
+                {t("auth.joinTitle")}
               </Typography>
               <Typography sx={{ color: "text.secondary" }}>
-                Build your profile and start curating your listening backlog.
+                {t("auth.joinSubtitle")}
               </Typography>
             </Stack>
 
@@ -83,7 +85,7 @@ function SignUpForm() {
               <Stack spacing={2}>
                 <TextField
                   type="text"
-                  label="Username"
+                  label={t("auth.username")}
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
@@ -92,7 +94,7 @@ function SignUpForm() {
 
                 <TextField
                   type="email"
-                  label="Email"
+                  label={t("auth.email")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -101,7 +103,7 @@ function SignUpForm() {
 
                 <TextField
                   type="password"
-                  label="Password"
+                  label={t("auth.password")}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -109,21 +111,21 @@ function SignUpForm() {
                 />
 
                 <Button type="submit" variant="contained" color="primary" size="large" disabled={isPending}>
-                  {isPending ? "Registering user..." : "Sign Up"}
+                  {isPending ? t("auth.registering") : t("auth.signUp")}
                 </Button>
 
                 {isError ? (
                   <Alert severity="error">
-                    Error: {(error as any)?.response?.data?.message || error.message}
+                    {t("auth.error", { message: (error as any)?.response?.data?.message || error.message })}
                   </Alert>
                 ) : null}
               </Stack>
             </Box>
 
             <Typography sx={{ textAlign: "center", color: "text.secondary" }}>
-              Already have an account?{" "}
+              {t("auth.alreadyHaveAccount")}{" "}
               <Link component={RouterLink} to="/login">
-                Login here
+                {t("auth.loginHere")}
               </Link>
             </Typography>
           </Stack>

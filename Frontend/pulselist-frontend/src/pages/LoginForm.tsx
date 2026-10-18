@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Alert, Box, Button, Container, Link, Paper, Stack, TextField, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../config/authConfig";
 import { auth } from "../firebaseConfig";
 import { signInBackend } from "../api/listManagementApi";
@@ -11,6 +12,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const { login: loginToAuth } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -28,7 +30,7 @@ export default function LoginForm() {
       await signInBackend(idToken);
       navigate("/account");
     } catch (err: any) {
-      setError(err?.message ?? "Login failed");
+      setError(err?.message ?? t("auth.loginFailed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -60,7 +62,7 @@ export default function LoginForm() {
               </Typography>
 
               <Typography sx={{ color: "text.secondary" }}>
-                Welcome back. Pick up your music journey.
+                {t("auth.welcomeBack")}
               </Typography>
             </Stack>
 
@@ -68,7 +70,7 @@ export default function LoginForm() {
               <Stack spacing={2}>
                 <TextField
                   type="email"
-                  label="Email"
+                  label={t("auth.email")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -78,7 +80,7 @@ export default function LoginForm() {
 
                 <TextField
                   type="password"
-                  label="Password"
+                  label={t("auth.password")}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -93,15 +95,15 @@ export default function LoginForm() {
                 ) : null}
 
                 <Button type="submit" variant="contained" color="primary" size="large" disabled={isSubmitting}>
-                  {isSubmitting ? "Logging In..." : "Login"}
+                  {isSubmitting ? t("auth.loggingIn") : t("navigation.login")}
                 </Button>
               </Stack>
             </Box>
 
             <Typography sx={{ textAlign: "center", color: "text.secondary" }}>
-              New to PulseList?{" "}
+              {t("auth.newToPulseList")}{" "}
               <Link component={RouterLink} to="/signUp">
-                Sign up here
+                {t("auth.signUpHere")}
               </Link>
             </Typography>
           </Stack>

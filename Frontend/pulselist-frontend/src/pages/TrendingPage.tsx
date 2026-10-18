@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   Button,
@@ -16,12 +17,12 @@ import { useTrendingReleases } from "../hooks/useTrendingReleases";
 import { addToList } from "../api/listManagementApi";
 import {
   LISTENING_STATUSES,
-  LISTENING_STATUS_LABELS,
   type ListeningStatus,
 } from "../types/listStatus";
 import PageLayout from "../components/PageLayout";
 
 export default function TrendingPage() {
+  const { t } = useTranslation();
   const [selectedStatuses, setSelectedStatuses] = useState<Record<number, ListeningStatus>>({});
   const queryClient = useQueryClient();
 
@@ -45,19 +46,19 @@ export default function TrendingPage() {
   return (
     <PageLayout
       showNavbar
-      title="Trending"
-      subtitle="Discover what's trending and save releases to your personal PulseList."
+      title={t("trending.title")}
+      subtitle={t("trending.subtitle")}
     >
-      {isLoading ? <Typography>Loading releases...</Typography> : null}
+      {isLoading ? <Typography>{t("trending.loading")}</Typography> : null}
 
       {error ? (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to load releases.
+          {t("trending.loadError")}
         </Alert>
       ) : null}
 
       {!isLoading && !error && albums.length === 0 ? (
-        <Typography>No trending releases found.</Typography>
+        <Typography>{t("trending.noResults")}</Typography>
       ) : null}
 
       {!isLoading && !error && albums.length > 0 ? (
@@ -69,14 +70,14 @@ export default function TrendingPage() {
                   <Stack spacing={1.5}>
                     <Typography variant="h6">{album.title}</Typography>
                     <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                      Year: {album.year || "Unknown"}
+                      {t("common.year", { value: album.year || t("common.unknown") })}
                     </Typography>
                     <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                      Country: {album.country || "Unknown"}
+                      {t("common.country", { value: album.country || t("common.unknown") })}
                     </Typography>
 
                     <Stack direction="row" spacing={1.2} sx={{ alignItems: "center" }}>
-                      <Typography variant="body2">Status</Typography>
+                      <Typography variant="body2">{t("common.status")}</Typography>
                       <Select
                         size="small"
                         value={getStatusForAlbum(album.id)}
@@ -89,7 +90,7 @@ export default function TrendingPage() {
                       >
                         {LISTENING_STATUSES.map((status) => (
                           <MenuItem key={status} value={status}>
-                            {LISTENING_STATUS_LABELS[status]}
+                            {t(`statuses.${status}`)}
                           </MenuItem>
                         ))}
                       </Select>
@@ -101,12 +102,12 @@ export default function TrendingPage() {
                         addToListMutation.mutate({
                           discogsReleaseId: album.id,
                           discogsTitle: album.title,
-                          discogsArtist: album.title.split(" - ")[0] || "Unknown artist",
+                          discogsArtist: album.title.split(" - ")[0] || t("common.unknownArtist"),
                           status: getStatusForAlbum(album.id),
                         });
                       }}
                     >
-                      Add to list
+                      {t("trending.addToList")}
                     </Button>
                   </Stack>
                 </CardContent>

@@ -1,14 +1,16 @@
 import { useState } from "react";
 import {   useInfiniteQuery, type InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Alert, Box, Button, Card, CardContent, CardMedia, Grid, MenuItem, Paper, Select, Stack, TextField, Typography,} from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useSearchDebounce } from "../hooks/useSearchDebounce";
 import { getSearchResults } from "../api/discogsApi";
 import { addToList } from "../api/listManagementApi";
 import type { DiscogsSearchResultDTO } from "../types/discogs";
-import { LISTENING_STATUSES, LISTENING_STATUS_LABELS, type ListeningStatus} from "../types/listStatus";
+import { LISTENING_STATUSES, type ListeningStatus} from "../types/listStatus";
 import PageLayout from "../components/PageLayout";
 
 export default function SearchPage() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatuses, setSelectedStatuses] = useState<Record<number, ListeningStatus>>({});
   const queryClient = useQueryClient();
@@ -57,14 +59,14 @@ const {
   return (
     <PageLayout
       showNavbar
-      title="Search"
-      subtitle="Find releases and save them to your personal PulseList."
+      title={t("search.title")}
+      subtitle={t("search.subtitle")}
     >
       <Paper sx={{ p: 3, mb: 3 }}>
         <TextField
           fullWidth
-          placeholder="Search releases..."
-          label="Search releases"
+          placeholder={t("search.placeholder")}
+          label={t("search.label")}
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
@@ -72,17 +74,17 @@ const {
         />
       </Paper>
 
-      {!searchTerm.trim() ? <Typography>Start typing to search for releases.</Typography> : null}
-      {isLoading ? <Typography>Loading releases...</Typography> : null}
+      {!searchTerm.trim() ? <Typography>{t("search.startTyping")}</Typography> : null}
+      {isLoading ? <Typography>{t("search.loading")}</Typography> : null}
 
       {isError ? (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to load releases. {error.message}
+          {t("search.loadError", { message: error.message })}
         </Alert>
       ) : null}
 
       {!isLoading && !isError && searchTerm.trim() && searchResults.length === 0 ? (
-        <Typography>No releases found.</Typography>
+        <Typography>{t("search.noResults")}</Typography>
       ) : null}
 
       {!isLoading && !isError && searchResults.length > 0 ? (
@@ -105,7 +107,7 @@ const {
                         color: "text.secondary",
                       }}
                     >
-                      No image
+                      {t("search.noImage")}
                     </Box>
                   )}
 
@@ -113,14 +115,14 @@ const {
                     <Stack spacing={1.5}>
                       <Typography variant="h6">{release.title}</Typography>
                       <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                        Year: {release.year || "Unknown"}
+                        {t("common.year", { value: release.year || t("common.unknown") })}
                       </Typography>
                       <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                        Country: {release.country || "Unknown"}
+                        {t("common.country", { value: release.country || t("common.unknown") })}
                       </Typography>
 
                       <Stack direction="row" spacing={1.2} sx={{ alignItems: "center" }}>
-                        <Typography variant="body2">Status</Typography>
+                        <Typography variant="body2">{t("common.status")}</Typography>
                         <Select
                           size="small"
                           value={getStatusForRelease(release.id)}
@@ -133,7 +135,7 @@ const {
                         >
                           {LISTENING_STATUSES.map((status) => (
                             <MenuItem key={status} value={status}>
-                              {LISTENING_STATUS_LABELS[status]}
+                              {t(`statuses.${status}`)}
                             </MenuItem>
                           ))}
                         </Select>
@@ -145,13 +147,13 @@ const {
                           addToListMutation.mutate({
                             discogsReleaseId: release.id,
                             discogsTitle: release.title,
-                            discogsArtist: release.title.split(" - ")[0] || "Unknown artist",
+                            discogsArtist: release.title.split(" - ")[0] || t("common.unknownArtist"),
                             discogsCoverUrl: imageUrl || undefined,
                             status: getStatusForRelease(release.id),
                           });
                         }}
                       >
-                        Add to list
+                        {t("search.addToList")}
                       </Button>
                     </Stack>
                   </CardContent>
@@ -165,7 +167,7 @@ const {
       {!isLoading && !isError && hasNextPage ? (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
           <Button variant="outlined" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-            {isFetchingNextPage ? "Loading more..." : "Load more"}
+            {isFetchingNextPage ? t("search.loadingMore") : t("search.loadMore")}
           </Button>
         </Box>
       ) : null}
