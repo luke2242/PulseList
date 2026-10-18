@@ -1,0 +1,98 @@
+{
+    "hello": "React is great!",
+    "currentLanguage": "Currently selected language: {{lang}}",
+    "changeLanguage": "Change language",
+    "home": {
+        "subtitle": "Track your music, discover new releases, and enhance your listening journey.",
+        "welcome": "Welcome Home",
+        "description": "Dive into trending releases, search releases, and keep your personal library up to date.",
+        "startSearching": "Start Searching",
+        "exploreTrending": "Explore Trending",
+        "openYourList": "Open Your List"
+    },
+    "landing": {
+        "title": "Welcome to PulseList",
+        "subtitle": "Your home for music tracking, discovery, and reviews.",
+        "description": "Build a listening queue, follow trends, and keep your music life organized.",
+        "createAccount": "Create Account"
+    },
+    "navigation": {
+        "home": "Home",
+        "search": "Search",
+        "trending": "Trending",
+        "yourList": "Your List",
+        "login": "Login",
+        "loggingOut": "Logging out...",
+        "logout": "Logout"
+    },
+    "auth": {
+        "welcomeBack": "Welcome back. Pick up your music journey.",
+        "email": "Email",
+        "password": "Password",
+        "loggingIn": "Logging In...",
+        "loginFailed": "Login failed",
+        "newToPulseList": "New to PulseList?",
+        "signUpHere": "Sign up here",
+        "joinTitle": "JOIN PULSELIST",
+        "joinSubtitle": "Build your profile and start curating your listening backlog.",
+        "username": "Username",
+        "registering": "Registering user...",
+        "signUp": "Sign Up",
+        "error": "Error: {{message}}",
+        "alreadyHaveAccount": "Already have an account?",
+        "loginHere": "Login here"
+    },
+    "search": {
+        "title": "Search",
+        "subtitle": "Find releases and save them to your personal PulseList.",
+        "placeholder": "Search releases...",
+        "label": "Search releases",
+        "startTyping": "Start typing to search for releases.",
+        "loading": "Loading releases...",
+        "loadError": "Failed to load releases. {{message}}",
+        "noResults": "No releases found.",
+        "noImage": "No image",
+        "addToList": "Add to list",
+        "loadingMore": "Loading more...",
+        "loadMore": "Load more"
+    },
+    "trending": {
+        "title": "Trending",
+        "subtitle": "Discover what's trending and save releases to your personal PulseList.",
+        "loading": "Loading releases...",
+        "loadError": "Failed to load releases.",
+        "noResults": "No trending releases found.",
+        "addToList": "Add to list"
+    },
+    "account": {
+        "welcome": "Welcome {{name}}",
+        "unknownUser": "User",
+        "subtitle": "Your personal music list, status tracking, and quick management tools.",
+        "filterByStatus": "Filter by status",
+        "allStatuses": "All statuses",
+        "shown": "{{total}} shown",
+        "loading": "Loading your music list...",
+        "loadError": "Failed to load music list: {{message}}",
+        "updateStatusError": "Failed to update status. {{message}}",
+        "removeError": "Failed to remove entry. {{message}}",
+        "empty": "Your list is empty.",
+        "noMatchingSongs": "No songs found for this status.",
+        "coverAlt": "{{title}} cover",
+        "removing": "Removing...",
+        "remove": "Remove"
+    },
+    "common": {
+        "unknown": "Unknown",
+        "unknownArtist": "Unknown artist",
+        "unknownError": "Unknown error",
+        "year": "Year: {{value}}",
+        "country": "Country: {{value}}",
+        "status": "Status"
+    },
+    "statuses": {
+        "WANT_TO_LISTEN": "Want to listen",
+        "CURRENTLY_LISTENING": "Currently listening",
+        "LISTENED": "Listened",
+        "DROPPED": "Dropped"
+    }
+}

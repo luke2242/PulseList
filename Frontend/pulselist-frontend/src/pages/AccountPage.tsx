@@ -1,14 +1,16 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Alert, Avatar, Box, Button, Chip, Grid, MenuItem, Paper, Select, Stack, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { changeStatus, fetchMyMusicList, removeFromList, type UserMusicListEntry } from "../api/listManagementApi";
 import { useAuth } from "../config/authConfig";
-import { LISTENING_STATUSES, LISTENING_STATUS_LABELS, type ListeningStatus } from "../types/listStatus";
+import { LISTENING_STATUSES, type ListeningStatus } from "../types/listStatus";
 import PageLayout from "../components/PageLayout";
 
 type StatusFilter = "ALL" | ListeningStatus;
 
 export default function AccountPage() {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("ALL");
@@ -73,15 +75,15 @@ export default function AccountPage() {
   return (
     <PageLayout
       showNavbar
-      title={`Welcome ${user?.displayName || user?.email || "User"}`}
-      subtitle="Your personal music list, status tracking, and quick management tools."
+      title={t("account.welcome", { name: user?.displayName || user?.email || t("account.unknownUser") })}
+      subtitle={t("account.subtitle")}
     >
       <Grid container spacing={2} sx={{ mb: 3 }}>
         {LISTENING_STATUSES.map((status) => (
           <Grid size={{ xs: 12, sm: 6, md: 3 }} key={status}>
             <Paper sx={{ p: 2 }}>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {LISTENING_STATUS_LABELS[status]}
+                {t(`statuses.${status}`)}
               </Typography>
               <Typography variant="h4">{statusCounts[status]}</Typography>
             </Paper>
@@ -91,48 +93,48 @@ export default function AccountPage() {
 
       <Paper sx={{ p: 2.5, mb: 3 }}>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ alignItems: "center" }}>
-          <Typography>Filter by status</Typography>
+          <Typography>{t("account.filterByStatus")}</Typography>
           <Select
             size="small"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
           >
-            <MenuItem value="ALL">All statuses</MenuItem>
+            <MenuItem value="ALL">{t("account.allStatuses")}</MenuItem>
             {LISTENING_STATUSES.map((status) => (
               <MenuItem key={status} value={status}>
-                {LISTENING_STATUS_LABELS[status]}
+                {t(`statuses.${status}`)}
               </MenuItem>
             ))}
           </Select>
           <Box sx={{ flexGrow: 1 }} />
-          <Chip label={`${filteredEntries.length} shown`} color="primary" />
+          <Chip label={t("account.shown", { total: filteredEntries.length })} color="primary" />
         </Stack>
       </Paper>
 
-      {isLoading ? <Typography>Loading your music list...</Typography> : null}
+      {isLoading ? <Typography>{t("account.loading")}</Typography> : null}
 
       {isError ? (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to load music list: {error instanceof Error ? error.message : "Unknown error"}
+          {t("account.loadError", { message: error instanceof Error ? error.message : t("common.unknownError") })}
         </Alert>
       ) : null}
 
       {changeStatusMutation.isError ? (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to update status. {changeStatusMutation.error instanceof Error ? changeStatusMutation.error.message : "Unknown error"}
+          {t("account.updateStatusError", { message: changeStatusMutation.error instanceof Error ? changeStatusMutation.error.message : t("common.unknownError") })}
         </Alert>
       ) : null}
 
       {removeEntryMutation.isError ? (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to remove entry. {removeEntryMutation.error instanceof Error ? removeEntryMutation.error.message : "Unknown error"}
+          {t("account.removeError", { message: removeEntryMutation.error instanceof Error ? removeEntryMutation.error.message : t("common.unknownError") })}
         </Alert>
       ) : null}
 
-      {!isLoading && !isError && myMusicList.length === 0 ? <Typography>Your list is empty.</Typography> : null}
+      {!isLoading && !isError && myMusicList.length === 0 ? <Typography>{t("account.empty")}</Typography> : null}
 
       {!isLoading && !isError && myMusicList.length > 0 && filteredEntries.length === 0 ? (
-        <Typography>No songs found for this status.</Typography>
+        <Typography>{t("account.noMatchingSongs")}</Typography>
       ) : null}
 
       <Stack spacing={1.5}>
@@ -142,7 +144,7 @@ export default function AccountPage() {
               <Avatar
                 variant="rounded"
                 src={entry.discogsCoverUrl || undefined}
-                alt={`${entry.discogsTitle} cover`}
+                alt={t("account.coverAlt", { title: entry.discogsTitle })}
                 sx={{ width: 64, height: 64, bgcolor: "rgba(250,235,215,0.1)" }}
               />
 
@@ -164,7 +166,7 @@ export default function AccountPage() {
               >
                 {LISTENING_STATUSES.map((status) => (
                   <MenuItem key={status} value={status}>
-                    {LISTENING_STATUS_LABELS[status]}
+                    {t(`statuses.${status}`)}
                   </MenuItem>
                 ))}
               </Select>
@@ -177,7 +179,7 @@ export default function AccountPage() {
                 }}
                 disabled={isRemovingEntry(entry)}
               >
-                {isRemovingEntry(entry) ? "Removing..." : "Remove"}
+                {isRemovingEntry(entry) ? t("account.removing") : t("account.remove")}
               </Button>
             </Stack>
           </Paper>

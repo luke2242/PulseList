@@ -15,10 +15,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../config/authConfig";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { user, logout } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -54,7 +56,7 @@ export default function Navbar() {
           size="large"
           edge="start"
           color="inherit"
-          aria-label="PulseList Home"
+          aria-label={`PulseList ${t("navigation.home")}`}
           onClick={() => navigate("/home")}
         >
           <AlbumIcon />
@@ -76,37 +78,37 @@ export default function Navbar() {
 
         <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
           <Button color="inherit" startIcon={<HomeIcon />} onClick={() => navigate("/home")}>
-            Home
+            {t("navigation.home")}
           </Button>
           <Button
             color="inherit"
             startIcon={<SearchIcon />}
             onClick={() => navigate("/search")}
           >
-            Search
+            {t("navigation.search")}
           </Button>
           <Button
             color="inherit"
             startIcon={<TrendingUpIcon />}
             onClick={() => navigate("/trending")}
           >
-            Trending
+            {t("navigation.trending")}
           </Button>
           <Button
             color="inherit"
             startIcon={<LibraryMusicIcon />}
             onClick={() => navigate("/account")}
           >
-            Your List
+            {t("navigation.yourList")}
           </Button>
 
           {!user ? (
             <Button variant="contained" color="primary" onClick={() => navigate("/login")}>
-              Login
+              {t("navigation.login")}
             </Button>
           ) : (
             <Button variant="outlined" color="primary" onClick={handleLogout} disabled={isLoggingOut}>
-              {isLoggingOut ? "Logging out..." : "Logout"}
+              {isLoggingOut ? t("navigation.loggingOut") : t("navigation.logout")}
             </Button>
           )}
         </Stack>
